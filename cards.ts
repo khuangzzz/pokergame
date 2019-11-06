@@ -28,8 +28,9 @@ export class PokerParser {
             while (true) {
                 const size = handArray.filter(str => str === v.value).length;
                 if (size === 4) {
+                    s.delete(v.value);
                     return {
-                        keyIndetifier: [CARD_RANKS[v.value], iterator.next()],
+                        keyIndetifier: [CARD_RANKS[v.value], CARD_RANKS[s.values().next().value]],
                         rank: RANK.FOUROFAKIND
                     };
                 }
@@ -74,14 +75,14 @@ export class PokerParser {
             const theSmallestStright = hand[0] === '2' && hand[1] === '3' && hand[2] === '4' && hand[3] === '5';
             if (theSmallestStright) {
                 return {
-                    keyIndetifier: [CARD_RANKS[hand[4]], CARD_RANKS[hand[0]]],
+                    keyIndetifier: [CARD_RANKS[hand[3]]],
                     rank: RANK.STRAIGHT
                 };
             }
             const theBiggestStright = hand[0] === 'T' && hand[1] === 'J' && hand[2] === 'Q' && hand[3] === 'K';
             if (theBiggestStright) {
                 return {
-                    keyIndetifier: [CARD_RANKS[hand[4]], CARD_RANKS[hand[0]]],
+                    keyIndetifier: [CARD_RANKS[hand[4]]],
                     rank: RANK.STRAIGHT
                 };
             }
@@ -113,7 +114,7 @@ export class PokerParser {
         if (regex.test(hand)) {
             const kind = regex.exec(hand)[0][0];
             return {
-                keyIndetifier: [CARD_RANKS[kind], ...[...hand].filter(str => str !== kind).map(rest => CARD_RANKS[rest])],
+                keyIndetifier: [CARD_RANKS[kind], ...[...hand].filter(str => str !== kind).map(rest => CARD_RANKS[rest]).reverse()],
                 rank: RANK.THREEOFAKIND
             };
         }
@@ -156,7 +157,7 @@ export class PokerParser {
         if (regex.test(hand)) {
             const kind = regex.exec(hand)[0][0];
             return {
-                keyIndetifier: [CARD_RANKS[kind], ...[...hand].filter(str => str !== kind).map(rest => CARD_RANKS[rest])],
+                keyIndetifier: [CARD_RANKS[kind], ...[...hand].filter(str => str !== kind).map(rest => CARD_RANKS[rest]).reverse()],
                 rank: RANK.PAIR
             };
         }
@@ -168,7 +169,7 @@ export class PokerParser {
 
     computeHighCard(hand: string): EvaluatedHand {
         return {
-            keyIndetifier: [...hand].map(str => CARD_RANKS[str]),
+            keyIndetifier: [...hand].map(str => CARD_RANKS[str]).reverse(),
             rank: RANK.HIGHCARD
         };
     }

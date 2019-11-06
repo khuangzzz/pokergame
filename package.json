@@ -14,5 +14,13 @@
     "prompt": "^1.0.0",
     "prompts": "^2.2.1",
     "typescript": "^3.6.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.22",
+    "ts-jest": "^24.1.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }
