@@ -19,9 +19,36 @@ export class PokerParser {
         return result;
     }
 
-    // computeRankWithJoker(hand: string): EvaluatedHand {
-    //     if ()
-    // }
+    computeRankWithJoker(hand: string): EvaluatedHand {
+        // Looking for potential five of a kind
+        let result = this.computeFourofAKind(hand);
+        if (result.rank === RANK.FOUROFAKIND) {
+            return {
+                keyIndetifier: [result.keyIndetifier[0]],
+                rank: RANK.FIVEOFAKIND
+            };
+        }
+        // Looking for potential four of a kind
+        result = this.computeThreeOfAKind(hand);
+        if (result.rank === RANK.THREEOFAKIND) {
+            return {
+                keyIndetifier: [result.keyIndetifier[0], result.keyIndetifier[2]],
+                rank: RANK.FOUROFAKIND
+            };
+        }
+
+        // Looking for potential full house
+        result = this.computeTwoPairs(hand);
+        if (result.rank === RANK.TWOPAIR) {
+            return {
+                keyIndetifier: [result.keyIndetifier[0], result.keyIndetifier[1]],
+                rank: RANK.FULLHOUSE
+            }
+        }
+
+        // Looing for potential stright
+        // const 
+    }
 
     computeFourofAKind(hand: string): EvaluatedHand {
         const [head1, ...rest1] = hand;
