@@ -11,7 +11,8 @@ export const CARD_RANKS = {
     'J': 11,
     'Q': 12,
     'K': 13,
-    'A': 14
+    'A': 14,
+    '*': 15
 };
 
 export interface EvaluatedHand {
@@ -27,5 +28,6 @@ export enum RANK {
     STRAIGHT,
     FULLHOUSE,
     FOUROFAKIND,
+    FIVEOFAKIND,
     UNDETERMINED
 }

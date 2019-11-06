@@ -19,32 +19,29 @@ export class PokerParser {
         return result;
     }
 
+    // computeRankWithJoker(hand: string): EvaluatedHand {
+    //     if ()
+    // }
+
     computeFourofAKind(hand: string): EvaluatedHand {
-        const s = new Set(hand);
-        const handArray = [...hand];
-        if (s.size === 2) {
-            const iterator = s.values();
-            let v = iterator.next();
-            while (true) {
-                const size = handArray.filter(str => str === v.value).length;
-                if (size === 4) {
-                    s.delete(v.value);
-                    return {
-                        keyIndetifier: [CARD_RANKS[v.value], CARD_RANKS[s.values().next().value]],
-                        rank: RANK.FOUROFAKIND
-                    };
-                }
-                if (v.done) {
-                    return {
-                        keyIndetifier: null,
-                        rank: RANK.UNDETERMINED
-                    };
-                }
-                v = iterator.next();
-            }
+        const [head1, ...rest1] = hand;
+        let potentialFourofKind = new Set(rest1).size === 1;
+        if (potentialFourofKind) {
+            return {
+                keyIndetifier: [CARD_RANKS[rest1[0]], CARD_RANKS[head1]],
+                rank: RANK.FOUROFAKIND
+            }; 
+        }
+        const [head2, ...rest2] = [...hand].reverse().join('');
+        potentialFourofKind = new Set(rest2).size === 1;
+        if (potentialFourofKind) {
+            return {
+                keyIndetifier: [CARD_RANKS[rest2[0]], CARD_RANKS[head2]],
+                rank: RANK.FOUROFAKIND
+            }; 
         }
         return {
-            keyIndetifier: null,
+            keyIndetifier: [],
             rank: RANK.UNDETERMINED
         };
     }

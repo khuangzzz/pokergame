@@ -8,12 +8,12 @@ declare const process: any;
 
 const [ , , , fileName ] = process.argv;
 
-export const validateInput = value => {
+export const validateInput = (value: string) => {
     const v = value.toUpperCase();
     if (v.length !== 11) {
         return false;
     }
-    const regex = new RegExp(/[TJQKA0-9]{5}\s[TJQKA0-9]{5}/);
+    const regex = new RegExp(/[TJQKA0-9\*]{5}\s[TJQKA0-9\*]{5}/);
     const counts = [...value.toUpperCase()].reduce((accumulated, current) => {
         if (accumulated[current]) {
             return { ...accumulated, [current]: accumulated[current] + 1 };
