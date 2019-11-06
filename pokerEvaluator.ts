@@ -8,9 +8,9 @@ export class PokerEvaluator {
     parser: PokerParser;
     results: Hands[];
 
-    constructor(handsSet: { [key: string]: string }) {
+    constructor(handsSet: string[]) {
         this.parser = new PokerParser();
-        const handpairs = this.preProcess(Object.values(handsSet));
+        const handpairs = this.preProcess(handsSet);
         this.results = this.evaluate(handpairs);
         this.outputResult();
     }
