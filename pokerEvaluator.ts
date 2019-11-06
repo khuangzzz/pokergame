@@ -12,6 +12,7 @@ export class PokerEvaluator {
         this.parser = new PokerParser();
         const handpairs = this.preProcess(Object.values(handsSet));
         this.results = this.evaluate(handpairs);
+        this.outputResult();
     }
 
     preProcess(handsSetValues: string[]): TwoHands {
@@ -27,6 +28,6 @@ export class PokerEvaluator {
     }
 
     outputResult(): void {
-        return this.results.forEach(result => console.log(result.toString()));
+        this.results.forEach(result => console.log(result.toString()));
     }
 }
