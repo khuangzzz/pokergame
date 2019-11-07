@@ -16,7 +16,7 @@ export const CARD_RANKS = {
 };
 
 export interface EvaluatedHand {
-    keyIndetifier: number[];
+    keyIdentifier: number[];
     rank: RANK;
 }
 

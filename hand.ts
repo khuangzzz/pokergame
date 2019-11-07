@@ -21,11 +21,11 @@ export class Hands {
     }
 
     deepCompare(): string {
-        for (let i = 0; i < this.handA.keyIndetifier.length; i++) {
-            if (this.handA.keyIndetifier[i] < this.handB.keyIndetifier[i]) {
+        for (let i = 0; i < this.handA.keyIdentifier.length; i++) {
+            if (this.handA.keyIdentifier[i] < this.handB.keyIdentifier[i]) {
                 return 'b';
             }
-            if (this.handA.keyIndetifier[i] > this.handB.keyIndetifier[i]) {
+            if (this.handA.keyIdentifier[i] > this.handB.keyIdentifier[i]) {
                 return 'a';
             }
         }

@@ -33,7 +33,7 @@ export class PokerParser {
         let result = this.computeFourofAKind(hand);
         if (result.rank === RANK.FOUROFAKIND) {
             return {
-                keyIndetifier: [result.keyIndetifier[0]],
+                keyIdentifier: [result.keyIdentifier[0]],
                 rank: RANK.FIVEOFAKIND
             };
         }
@@ -41,7 +41,7 @@ export class PokerParser {
         result = this.computeThreeOfAKind(hand);
         if (result.rank === RANK.THREEOFAKIND) {
             return {
-                keyIndetifier: [result.keyIndetifier[0], result.keyIndetifier[2]],
+                keyIdentifier: [result.keyIdentifier[0], result.keyIdentifier[2]],
                 rank: RANK.FOUROFAKIND
             };
         }
@@ -50,7 +50,7 @@ export class PokerParser {
         result = this.computeTwoPairs(hand);
         if (result.rank === RANK.TWOPAIR) {
             return {
-                keyIndetifier: [result.keyIndetifier[0], result.keyIndetifier[1]],
+                keyIdentifier: [result.keyIdentifier[0], result.keyIdentifier[1]],
                 rank: RANK.FULLHOUSE
             };
         }
@@ -60,7 +60,7 @@ export class PokerParser {
         if (hand.includes('A')) {
             if (delta === 4 || delta === 3) {
                 return {
-                    keyIndetifier: [CARD_RANKS['A']],
+                    keyIdentifier: [CARD_RANKS['A']],
                     rank: RANK.STRAIGHT
                 };
             }
@@ -69,20 +69,20 @@ export class PokerParser {
             const possibility3 = hand[0] === '2' && hand[1] === '4' && hand[2] === '5';
             if (possibility1 || possibility2 || possibility3) {
                 return {
-                    keyIndetifier: [CARD_RANKS['5']],
+                    keyIdentifier: [CARD_RANKS['5']],
                     rank: RANK.STRAIGHT
                 };
             }
         } else {
             if (delta === 3) {
                 return {
-                    keyIndetifier: [CARD_RANKS[hand[3]] + 1],
+                    keyIdentifier: [CARD_RANKS[hand[3]] + 1],
                     rank: RANK.STRAIGHT
                 };
             }
             if (delta === 4) {
                 return {
-                    keyIndetifier: [CARD_RANKS[hand[3]]],
+                    keyIdentifier: [CARD_RANKS[hand[3]]],
                     rank: RANK.STRAIGHT
                 }
             }
@@ -92,7 +92,7 @@ export class PokerParser {
         result = this.computePair(hand);
         if (result.rank === RANK.PAIR) {
             return {
-                keyIndetifier: [result.keyIndetifier[0], result.keyIndetifier[2], result.keyIndetifier[3]],
+                keyIdentifier: [result.keyIdentifier[0], result.keyIdentifier[2], result.keyIdentifier[3]],
                 rank: RANK.THREEOFAKIND
             }
         }
@@ -100,7 +100,7 @@ export class PokerParser {
         // Looking for potential pair
         result = this.computeHighCard(hand);
         return {
-            keyIndetifier: result.keyIndetifier.slice(1),
+            keyIdentifier: result.keyIdentifier.slice(1),
             rank: RANK.PAIR
         };
     }
@@ -110,7 +110,7 @@ export class PokerParser {
         let potentialFourofKind = new Set(rest1).size === 1;
         if (potentialFourofKind) {
             return {
-                keyIndetifier: [CARD_RANKS[rest1[0]], CARD_RANKS[head1]],
+                keyIdentifier: [CARD_RANKS[rest1[0]], CARD_RANKS[head1]],
                 rank: RANK.FOUROFAKIND
             };
         }
@@ -118,12 +118,12 @@ export class PokerParser {
         potentialFourofKind = new Set(rest2).size === 1;
         if (potentialFourofKind) {
             return {
-                keyIndetifier: [CARD_RANKS[rest2[0]], CARD_RANKS[head2]],
+                keyIdentifier: [CARD_RANKS[rest2[0]], CARD_RANKS[head2]],
                 rank: RANK.FOUROFAKIND
             };
         }
         return {
-            keyIndetifier: [],
+            keyIdentifier: [],
             rank: RANK.UNDETERMINED
         };
     }
@@ -133,18 +133,18 @@ export class PokerParser {
         const AABBB = hand[0] === hand[1] && hand[2] === hand[3] && hand[3] === hand[4];
         if (AAABB) {
             return {
-                keyIndetifier: [CARD_RANKS[hand[0]], CARD_RANKS[hand[4]]],
+                keyIdentifier: [CARD_RANKS[hand[0]], CARD_RANKS[hand[4]]],
                 rank: RANK.FULLHOUSE
             };
         }
         if (AABBB) {
             return {
-                keyIndetifier: [CARD_RANKS[hand[4]], CARD_RANKS[hand[0]]],
+                keyIdentifier: [CARD_RANKS[hand[4]], CARD_RANKS[hand[0]]],
                 rank: RANK.FULLHOUSE
             };
         }
         return {
-            keyIndetifier: [],
+            keyIdentifier: [],
             rank: RANK.UNDETERMINED
         };
     }
@@ -154,31 +154,31 @@ export class PokerParser {
             const theSmallestStright = hand[0] === '2' && hand[1] === '3' && hand[2] === '4' && hand[3] === '5';
             if (theSmallestStright) {
                 return {
-                    keyIndetifier: [CARD_RANKS[hand[3]]],
+                    keyIdentifier: [CARD_RANKS[hand[3]]],
                     rank: RANK.STRAIGHT
                 };
             }
             const theBiggestStright = hand[0] === 'T' && hand[1] === 'J' && hand[2] === 'Q' && hand[3] === 'K';
             if (theBiggestStright) {
                 return {
-                    keyIndetifier: [CARD_RANKS[hand[4]]],
+                    keyIdentifier: [CARD_RANKS[hand[4]]],
                     rank: RANK.STRAIGHT
                 };
             }
             return {
-                keyIndetifier: null,
+                keyIdentifier: null,
                 rank: RANK.UNDETERMINED
             };
         }
         const delta = CARD_RANKS[hand[4]] - CARD_RANKS[hand[0]];
         if (delta === 4) {
             return {
-                keyIndetifier: [CARD_RANKS[hand[4]]],
+                keyIdentifier: [CARD_RANKS[hand[4]]],
                 rank: RANK.STRAIGHT
             };
         } else {
             return {
-                keyIndetifier: null,
+                keyIdentifier: null,
                 rank: RANK.UNDETERMINED
             };
         } 
@@ -189,12 +189,12 @@ export class PokerParser {
         if (regex.test(hand)) {
             const kind = regex.exec(hand)[0][0];
             return {
-                keyIndetifier: [CARD_RANKS[kind], ...[...hand].filter(str => str !== kind).map(rest => CARD_RANKS[rest]).reverse()],
+                keyIdentifier: [CARD_RANKS[kind], ...[...hand].filter(str => str !== kind).map(rest => CARD_RANKS[rest]).reverse()],
                 rank: RANK.THREEOFAKIND
             };
         }
         return {
-            keyIndetifier: null,
+            keyIdentifier: null,
             rank: RANK.UNDETERMINED
         };
     }
@@ -205,24 +205,24 @@ export class PokerParser {
         const AABCC = hand[0] === hand[1] && hand[3] === hand[4];
         if (AABBC) {
             return {
-                keyIndetifier: [CARD_RANKS[hand[2]], CARD_RANKS[hand[1]], CARD_RANKS[hand[4]]],
+                keyIdentifier: [CARD_RANKS[hand[2]], CARD_RANKS[hand[1]], CARD_RANKS[hand[4]]],
                 rank: RANK.TWOPAIR
             };
         }
         if (ABBCC) {
             return {
-                keyIndetifier: [CARD_RANKS[hand[3]], CARD_RANKS[hand[1]], CARD_RANKS[hand[0]]],
+                keyIdentifier: [CARD_RANKS[hand[3]], CARD_RANKS[hand[1]], CARD_RANKS[hand[0]]],
                 rank: RANK.TWOPAIR
             };
         }
         if (AABCC) {
             return {
-                keyIndetifier: [CARD_RANKS[hand[3]], CARD_RANKS[hand[1]], CARD_RANKS[hand[2]]],
+                keyIdentifier: [CARD_RANKS[hand[3]], CARD_RANKS[hand[1]], CARD_RANKS[hand[2]]],
                 rank: RANK.TWOPAIR
             };
         }
         return {
-            keyIndetifier: null,
+            keyIdentifier: null,
             rank: RANK.UNDETERMINED
         };
     }
@@ -232,19 +232,19 @@ export class PokerParser {
         if (regex.test(hand)) {
             const kind = regex.exec(hand)[0][0];
             return {
-                keyIndetifier: [CARD_RANKS[kind], ...[...hand].filter(str => str !== kind).map(rest => CARD_RANKS[rest]).reverse()],
+                keyIdentifier: [CARD_RANKS[kind], ...[...hand].filter(str => str !== kind).map(rest => CARD_RANKS[rest]).reverse()],
                 rank: RANK.PAIR
             };
         }
         return {
-            keyIndetifier: null,
+            keyIdentifier: null,
             rank: RANK.UNDETERMINED
         };
     }
 
     computeHighCard(hand: string): EvaluatedHand {
         return {
-            keyIndetifier: [...hand].map(str => CARD_RANKS[str]).reverse(),
+            keyIdentifier: [...hand].map(str => CARD_RANKS[str]).reverse(),
             rank: RANK.HIGHCARD
         };
     }
