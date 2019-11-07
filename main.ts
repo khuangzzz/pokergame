@@ -11,7 +11,7 @@ const [ , , , fileName ] = process.argv;
 export const validateInput = (value: string) => {
     const v = value.toUpperCase();
     if (v.length !== 11) {
-        return 'Each hand must be exactly five cards sparated by space';
+        return 'Each hand must be exactly five cards separated by space';
     }
     const [hand1, hand2] = v.split(' ');
     const regex = new RegExp(/^(?=.{5}$)[2-9,TJKQA]*\*?[2-9,TJKQA]*$/);
@@ -36,7 +36,7 @@ export const validateInput = (value: string) => {
 const buildOptions = (answer) => <unknown>new Array(answer).fill('').map((_, idx) => ({
     type: 'text',
     name: `pokerHands${idx}`,
-    message: `Please input two hands seperated by space, ${idx}:`,
+    message: `Please input two hands separated by space, ${idx}:`,
     validate: validateInput
 }));
 
