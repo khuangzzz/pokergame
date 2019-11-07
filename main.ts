@@ -13,6 +13,7 @@ export const validateInput = (value: string) => {
     if (v.length !== 11) {
         return false;
     }
+    const [hand1, hand2] = v.split(' ');
     const regex = new RegExp(/^(?=.{5}$)[2-9,TJKQA]*\*?[2-9,TJKQA]*$/);
     const counts = [...value.toUpperCase()].reduce((accumulated, current) => {
         if (accumulated[current]) {
@@ -20,7 +21,7 @@ export const validateInput = (value: string) => {
         }
         return { ...accumulated, [current]: 1 };
     }, {});
-    return regex.test(v) && !Object.values(counts).find(c => c > 4);
+    return regex.test(hand1) && regex.test(hand2) && !Object.values(counts).find(c => c > 4);
 };
 
 const buildOptions = (answer) => <unknown>new Array(answer).fill('').map((_, idx) => ({
