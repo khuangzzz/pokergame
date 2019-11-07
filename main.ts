@@ -13,7 +13,7 @@ export const validateInput = (value: string) => {
     if (v.length !== 11) {
         return false;
     }
-    const regex = new RegExp(/[TJQKA0-9\*]{5}\s[TJQKA0-9\*]{5}/);
+    const regex = new RegExp(/^(?=.{5}$)[2-9,TJKQA]*\*?[2-9,TJKQA]*$/);
     const counts = [...value.toUpperCase()].reduce((accumulated, current) => {
         if (accumulated[current]) {
             return { ...accumulated, [current]: accumulated[current] + 1 };
