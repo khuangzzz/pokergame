@@ -48,7 +48,7 @@ if (typeof __TEST__ === 'undefined' && !fileName) {
                 type: 'number',
                 name: 'value',
                 message: 'How many hands would you like to evaluate?',
-                validate: value => Number.isInteger(value)
+                validate: value => Number.isInteger(value) && value < Math.pow(10, 5)
             }
         ], {
             onSubmit: async (prompt, answer) => {
