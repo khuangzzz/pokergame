@@ -170,22 +170,18 @@ export class PokerParser {
                 rank: RANK.UNDETERMINED
             };
         }
-        let next = hand[1];
-        let i = 0;
-        do {
-            if (CARD_RANKS[hand[i]] + 1 !== CARD_RANKS[next]) {
-                return {
-                    keyIndetifier: null,
-                    rank: RANK.UNDETERMINED
-                };
-            }
-            i = i + 1;
-            next = hand[i + 1];
-        } while (i < hand.length - 1);
-        return {
-            keyIndetifier: [CARD_RANKS[hand[4]]],
-            rank: RANK.STRAIGHT
-        };
+        const delta = CARD_RANKS[hand[4]] - CARD_RANKS[hand[0]];
+        if (delta === 4) {
+            return {
+                keyIndetifier: [CARD_RANKS[hand[4]]],
+                rank: RANK.STRAIGHT
+            };
+        } else {
+            return {
+                keyIndetifier: null,
+                rank: RANK.UNDETERMINED
+            };
+        } 
     }
 
     computeThreeOfAKind(hand: string): EvaluatedHand {
