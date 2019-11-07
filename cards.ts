@@ -12,16 +12,98 @@ export class PokerParser {
             this.computeHighCard
         ];
         const iterator = computationFunctions[Symbol.iterator]();
-        let result = iterator.next().value(hand);
-        while (result.rank === RANK.UNDETERMINED) {
+        let result;
+        if (hand.includes('*')) {
+            result = this.computeRankWithJoker(hand);
+        } else {
             result = iterator.next().value(hand);
+        }
+        while (result.rank === RANK.UNDETERMINED) {
+            if (hand.includes('*')) {
+                result = this.computeRankWithJoker(hand);
+            } else {
+                result = iterator.next().value(hand);
+            }
         }
         return result;
     }
 
-    // computeRankWithJoker(hand: string): EvaluatedHand {
-    //     if ()
-    // }
+    computeRankWithJoker(hand: string): EvaluatedHand {
+        // Looking for potential five of a kind
+        let result = this.computeFourofAKind(hand);
+        if (result.rank === RANK.FOUROFAKIND) {
+            return {
+                keyIndetifier: [result.keyIndetifier[0]],
+                rank: RANK.FIVEOFAKIND
+            };
+        }
+        // Looking for potential four of a kind
+        result = this.computeThreeOfAKind(hand);
+        if (result.rank === RANK.THREEOFAKIND) {
+            return {
+                keyIndetifier: [result.keyIndetifier[0], result.keyIndetifier[2]],
+                rank: RANK.FOUROFAKIND
+            };
+        }
+
+        // Looking for potential full house
+        result = this.computeTwoPairs(hand);
+        if (result.rank === RANK.TWOPAIR) {
+            return {
+                keyIndetifier: [result.keyIndetifier[0], result.keyIndetifier[1]],
+                rank: RANK.FULLHOUSE
+            };
+        }
+
+        // Looing for potential stright
+        const delta = CARD_RANKS[hand[3]] - CARD_RANKS[hand[0]];
+        if (hand.includes('A')) {
+            if (delta === 4 || delta === 3) {
+                return {
+                    keyIndetifier: [CARD_RANKS['A']],
+                    rank: RANK.STRAIGHT
+                };
+            }
+            const possibility1 = hand[0] === '3' && hand[1] === '4' && hand[2] === '5';
+            const possibility2 = hand[0] === '2' && hand[1] === '3' && hand[2] === '4';
+            const possibility3 = hand[0] === '2' && hand[1] === '4' && hand[2] === '5';
+            if (possibility1 || possibility2 || possibility3) {
+                return {
+                    keyIndetifier: [CARD_RANKS['5']],
+                    rank: RANK.STRAIGHT
+                };
+            }
+        } else {
+            if (delta === 3) {
+                return {
+                    keyIndetifier: [CARD_RANKS[hand[3]] + 1],
+                    rank: RANK.STRAIGHT
+                };
+            }
+            if (delta === 4) {
+                return {
+                    keyIndetifier: [CARD_RANKS[hand[3]]],
+                    rank: RANK.STRAIGHT
+                }
+            }
+        }
+
+        // Looking for potential three of a kind
+        result = this.computePair(hand);
+        if (result.rank === RANK.PAIR) {
+            return {
+                keyIndetifier: [result.keyIndetifier[0], result.keyIndetifier[2], result.keyIndetifier[3]],
+                rank: RANK.THREEOFAKIND
+            }
+        }
+
+        // Looking for potential pair
+        result = this.computeHighCard(hand);
+        return {
+            keyIndetifier: result.keyIndetifier.slice(1),
+            rank: RANK.PAIR
+        };
+    }
 
     computeFourofAKind(hand: string): EvaluatedHand {
         const [head1, ...rest1] = hand;
@@ -30,7 +112,7 @@ export class PokerParser {
             return {
                 keyIndetifier: [CARD_RANKS[rest1[0]], CARD_RANKS[head1]],
                 rank: RANK.FOUROFAKIND
-            }; 
+            };
         }
         const [head2, ...rest2] = [...hand].reverse().join('');
         potentialFourofKind = new Set(rest2).size === 1;
@@ -38,7 +120,7 @@ export class PokerParser {
             return {
                 keyIndetifier: [CARD_RANKS[rest2[0]], CARD_RANKS[head2]],
                 rank: RANK.FOUROFAKIND
-            }; 
+            };
         }
         return {
             keyIndetifier: [],
@@ -88,22 +170,18 @@ export class PokerParser {
                 rank: RANK.UNDETERMINED
             };
         }
-        let next = hand[1];
-        let i = 0;
-        do {
-            if (CARD_RANKS[hand[i]] + 1 !== CARD_RANKS[next]) {
-                return {
-                    keyIndetifier: null,
-                    rank: RANK.UNDETERMINED
-                };
-            }
-            i = i + 1;
-            next = hand[i + 1];
-        } while (i < hand.length - 1);
-        return {
-            keyIndetifier: [CARD_RANKS[hand[4]]],
-            rank: RANK.STRAIGHT
-        };
+        const delta = CARD_RANKS[hand[4]] - CARD_RANKS[hand[0]];
+        if (delta === 4) {
+            return {
+                keyIndetifier: [CARD_RANKS[hand[4]]],
+                rank: RANK.STRAIGHT
+            };
+        } else {
+            return {
+                keyIndetifier: null,
+                rank: RANK.UNDETERMINED
+            };
+        } 
     }
 
     computeThreeOfAKind(hand: string): EvaluatedHand {

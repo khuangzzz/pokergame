@@ -11,16 +11,26 @@ const [ , , , fileName ] = process.argv;
 export const validateInput = (value: string) => {
     const v = value.toUpperCase();
     if (v.length !== 11) {
-        return false;
+        return 'Each hand must be exactly five cards sparated by space';
     }
-    const regex = new RegExp(/[TJQKA0-9]{5}\s[TJQKA0-9]{5}/);
+    const [hand1, hand2] = v.split(' ');
+    const regex = new RegExp(/^(?=.{5}$)[2-9,TJKQA]*\*?[2-9,TJKQA]*$/);
     const counts = [...value.toUpperCase()].reduce((accumulated, current) => {
         if (accumulated[current]) {
             return { ...accumulated, [current]: accumulated[current] + 1 };
         }
         return { ...accumulated, [current]: 1 };
     }, {});
-    return regex.test(v) && !Object.values(counts).find(c => c > 4);
+    if (!regex.test(hand1)) {
+        return `this hand: ${hand1} is not valid`;
+    }
+    if (!regex.test(hand2)) {
+        return `this hand: ${hand2} is not valid`;
+    }
+    if (Object.values(counts).find(c => c > 4)) {
+        return `Hey, you are cheating`;
+    }
+    return true;
 };
 
 const buildOptions = (answer) => <unknown>new Array(answer).fill('').map((_, idx) => ({
