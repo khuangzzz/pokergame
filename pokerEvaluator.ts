@@ -16,11 +16,16 @@ export class PokerEvaluator {
     }
 
     preProcess(handsSetValues: string[]): TwoHands {
-        return handsSetValues.map(handSet => 
-            handSet.split(' ').map(hand => 
-                [...hand].sort((a, b) => CARD_RANKS[a] >= CARD_RANKS[b] ? 1 : 0).join('').toUpperCase()
+        const computation = (hand) => 
+            [...hand].sort((a, b) => {
+                return CARD_RANKS[a] - CARD_RANKS[b];
+            }).join('').toUpperCase()
+        const result = handsSetValues.map(handSet => 
+            handSet.toUpperCase().split(' ').map(hand => 
+                computation(hand)
             )
         );
+        return result;
     }
 
     evaluate(handpairs: TwoHands): Hands[] {
