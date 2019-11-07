@@ -12,6 +12,7 @@
     55566 44447
     ........
     ```
+    - example input file: input.txt, you can try it by `npm run start:file`
 
 # Tests
 - npm test
